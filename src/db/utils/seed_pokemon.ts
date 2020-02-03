@@ -56,4 +56,8 @@ const seedPokemon = async () => {
   }
 };
 
+if (process.env.SEED) {
+  seedPokemon();
+}
+
 export default seedPokemon;
