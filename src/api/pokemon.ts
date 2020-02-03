@@ -1,26 +1,30 @@
 import { Router } from 'express';
-import { User, Pokemon } from '../db/index';
+import chalk from 'chalk';
+import { Pokemon, UserPokemon } from '../db/index';
 import redis from '../redis';
 
 const pokemon = Router();
 
 pokemon.get('/', async (req, res, next) => {
+  console.log(chalk.yellow(`User Auth: ${req.headers.authorization}`));
   if (req.headers.authorization) {
     const userId = await redis.get(req.headers.authorization);
 
-    const user = await User.findByPk(userId, {
-      include: [Pokemon],
+    console.log(chalk.yellow(`User Id: ${userId}`));
+
+    const userPokemonIds = await UserPokemon.findAll({
+      where: {
+        UserId: userId,
+      },
     });
 
-    if (user) {
-      res.send(user.pokemon);
-    } else {
-      res.send({
-        message: 'The authorization you sent didnt link to a user. You may need to re-register with your nearest pokemon center.',
-      });
-    }
+    const userPokemon = await Promise.all(userPokemonIds.map(({ PokemonId }) => Pokemon.findByPk(PokemonId)));
+
+    res.send(userPokemon);
   } else {
-    res.sendStatus(401);
+    res.status(401).send({
+      message: 'The authorization you sent didnt link to a user. You may need to re-register with your nearest pokemon center.',
+    });
   }
 });
 

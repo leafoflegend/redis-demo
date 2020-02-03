@@ -23,14 +23,14 @@ auth.get('/register', async (req, res, next) => {
       await redis.expire(secret, 30);
 
       const selectedPokemon = await Pokemon.findAll({
-        order: Sequelize.literal('rand()'),
+        order: Sequelize.literal('random()'),
         limit: 6,
       });
 
       const usersPokemon = await UserPokemon.bulkCreate(
         selectedPokemon.map(pokemon => ({
-          pokemonId: pokemon.id,
-          userId: user.id,
+          PokemonId: pokemon.id,
+          UserId: user.id,
         }))
       );
 

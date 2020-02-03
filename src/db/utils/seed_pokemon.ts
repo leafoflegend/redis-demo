@@ -50,13 +50,10 @@ const seedPokemon = async () => {
     const results = await Pokemon.bulkCreate(pokemonForInsertion);
 
     console.log(chalk.green(`Successfully seeded ${results.length} Pokemon!`));
-
-    process.exit(0);
   } catch (e) {
     console.log(chalk.red(`Unable to seed pokemon.`));
     console.error(e);
-    process.exit(1);
   }
 };
 
-seedPokemon();
+export default seedPokemon;

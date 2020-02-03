@@ -5,6 +5,7 @@ import { db } from './db/index';
 import api from './api/index';
 import middleware from './middleware/index';
 import redis from './redis/index';
+import seedPokemon from './db/utils/seed_pokemon';
 
 const app = express();
 
@@ -21,7 +22,12 @@ const startServer = () => new Promise(res => app.listen(PORT, () => {
 
 const startApp = async () => {
   try {
-    await db.sync({force: false});
+    await db.sync({ force: false });
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(chalk.yellow('Due to a development environment, commencing seeding of DB.'));
+      await seedPokemon();
+    }
 
     console.log(chalk.green('Database synced.'));
 

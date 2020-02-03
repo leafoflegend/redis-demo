@@ -6,20 +6,13 @@ import db from '../db';
 const { UUID, INTEGER } = DataTypes;
 
 class UserPokemon extends Model {
-  public pokemonId!: number;
-  public userId!: string;
+  public PokemonId!: number;
+  public UserId!: string;
 }
 
-UserPokemon.init({
-  pokemonId: {
-    type: INTEGER,
-    allowNull: false,
-  },
-  userId: {
-    type: UUID,
-    allowNull: false,
-  },
-}, {
+UserPokemon.init(
+  {},
+  {
   timestamps: false,
   tableName: 'UserPokemon',
   freezeTableName: true,
