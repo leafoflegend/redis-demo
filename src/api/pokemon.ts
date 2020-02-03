@@ -12,6 +12,13 @@ pokemon.get('/', async (req, res, next) => {
 
     console.log(chalk.yellow(`User Id: ${userId}`));
 
+    if (!userId) {
+      res.sendStatus(401);
+      return;
+    }
+
+    await redis.expire(req.headers.authorization, 30);
+
     const userPokemonIds = await UserPokemon.findAll({
       where: {
         UserId: userId,
