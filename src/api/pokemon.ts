@@ -20,7 +20,7 @@ pokemon.get('/', async (req, res, next) => {
 
     const userPokemon = await Promise.all(userPokemonIds.map(({ PokemonId }) => Pokemon.findByPk(PokemonId)));
 
-    console.log(chalk.cyan(`Healing pokemon for user ${userId}`));
+    console.log(chalk.cyan(`Healing ${userPokemon.length} pokemon for user ${userId}. ${userPokemon.map(({ name }) => name).join(', ')}`));
     setTimeout(() => {
       res.send(userPokemon);
     }, 2500);
