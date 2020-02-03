@@ -20,7 +20,10 @@ pokemon.get('/', async (req, res, next) => {
 
     const userPokemon = await Promise.all(userPokemonIds.map(({ PokemonId }) => Pokemon.findByPk(PokemonId)));
 
-    res.send(userPokemon);
+    console.log(chalk.cyan(`Healing pokemon for user ${userId}`));
+    setTimeout(() => {
+      res.send(userPokemon);
+    }, 2500);
   } else {
     res.status(401).send({
       message: 'The authorization you sent didnt link to a user. You may need to re-register with your nearest pokemon center.',
