@@ -53,11 +53,15 @@ const seedPokemon = async () => {
   } catch (e) {
     console.log(chalk.red(`Unable to seed pokemon.`));
     console.error(e);
+
+    throw e;
   }
 };
 
 if (process.env.SEED) {
-  seedPokemon();
+  seedPokemon()
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1));
 }
 
 export default seedPokemon;
