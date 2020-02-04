@@ -5,10 +5,14 @@ import redis from '../redis';
 
 const pokemon = Router();
 
+const HOUR = 60 * 60;
+
 pokemon.get('/', async (req, res, next) => {
-  console.log(chalk.yellow(`User Auth: ${req.headers.authorization}`));
-  if (req.headers.authorization) {
-    const userId = await redis.get(req.headers.authorization);
+  const secret = req.headers.authorization;
+
+  console.log(chalk.yellow(`User Auth: ${secret}`));
+  if (secret) {
+    const userId = await redis.get(secret);
 
     console.log(chalk.yellow(`User Id: ${userId}`));
 
@@ -17,7 +21,7 @@ pokemon.get('/', async (req, res, next) => {
       return;
     }
 
-    await redis.expire(req.headers.authorization, 30);
+    await redis.expire(secret, HOUR);
 
     const userPokemonIds = await UserPokemon.findAll({
       where: {
